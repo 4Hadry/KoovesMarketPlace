@@ -126,7 +126,7 @@ export const createProduct = TryCatch(async (req, res, next) => {
     photo: photo.path,
     brand,
   });
-  await invalidateCaches({ product: true });
+  await invalidateCaches({ product: true, admin: true });
   return res.status(201).json({
     success: true,
     message: "Product Created Successfully",

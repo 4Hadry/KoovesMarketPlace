@@ -31,6 +31,12 @@ export const invalidateCaches = async ({
     myCache.del(ordersKeys);
   }
   if (admin) {
+    myCache.del([
+      "admin-stats",
+      "admin-pie-charts",
+      "admin-bar-charts",
+      "admin-line-charts",
+    ]);
   }
 };
 
@@ -42,4 +48,28 @@ export const reduceStock = async (orderItems) => {
     product.stock -= order.quantity;
     await product.save();
   }
+};
+
+export const calculatePercentage = (thisMonth, lastMonth) => {
+  if (lastMonth === 0) return thisMonth * 100;
+
+  const percent = (thisMonth / lastMonth) * 100;
+  return Number(percent.toFixed(0));
+};
+
+export const getInventories = async ({ categories, productsCount }) => {
+  const categoriesCountPromise = categories.map((category) =>
+    Product.countDocuments({ category })
+  );
+
+  const categoriesCount = await Promise.all(categoriesCountPromise);
+
+  const categoryCount = [];
+
+  categories.forEach((category, i) => {
+    categoryCount.push({
+      [category]: Math.round((categoriesCount[i] / productsCount) * 100),
+    });
+  });
+  return categoryCount;
 };

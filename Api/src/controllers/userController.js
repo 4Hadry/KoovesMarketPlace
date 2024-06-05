@@ -1,5 +1,6 @@
 import { TryCatch } from "../middleware/error.js";
 import { User } from "../models/userModel.js";
+import { invalidateCaches } from "../utils/features.js";
 import { generateToken } from "../utils/generateToken.js";
 import ErrorHandler from "../utils/utils-class.js";
 
@@ -18,6 +19,13 @@ export const registerUser = TryCatch(async (req, res, next) => {
     email,
     password,
     role,
+  });
+
+  invalidateCaches({
+    product: true,
+    order: true,
+    admin: true,
+    userId: user._id,
   });
 
   if (user) {

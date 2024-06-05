@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import UserRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import dashboardRoutes from "./routes/statRoutes.js";
 
 const app = express();
 
@@ -40,6 +41,7 @@ mongoose
 app.use("/api/v1/user", UserRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 app.use("/uploads", express.static("uploads"));
 app.use(ErrorMiddleware);

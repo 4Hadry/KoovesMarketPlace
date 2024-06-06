@@ -157,7 +157,7 @@ export const updateProduct = TryCatch(async (req, res, next) => {
   if (brand) product.brand = brand;
 
   await product.save();
-  await invalidateCaches({ product: true });
+  await invalidateCaches({ product: true, admin: true });
 
   return res.status(200).json({
     success: true,

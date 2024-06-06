@@ -3,9 +3,9 @@ import express from "express";
 // import { isAdmin } from "../middleware/auth.js";
 import {
   getDashboardStats,
+  getPieCharts,
   //   getBarCharts,
   //   getLineCharts,
-  //   getPieCharts,
 } from "../controllers/statsController.js";
 import { isAdmin } from "../middleware/auth.js";
 
@@ -14,7 +14,7 @@ const route = express.Router();
 route.get("/stats", isAdmin, getDashboardStats);
 
 // api/v1/dashboard/pie
-// route.get("/pie", isAdmin, getPieCharts);
+route.get("/pie", isAdmin, getPieCharts);
 
 // api/v1/dashboard/bar
 // route.get("/bar", isAdmin, getBarCharts);

@@ -71,13 +71,25 @@ const productData = [
 ];
 
 const Products = () => {
+  const addToCart = () => {};
   return (
     <div>
       <div className="container">
         {/* Header Section  */}
-        <Heading title="Our Products" subtitle="Explore Ou Products" />
+        <Heading title="Latest Products" subtitle="Explore Our Products" />
         {/* Body Section  */}
-        <ProductCard data={productData} />
+        <div className="mb-10 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 place-items-center">
+            <ProductCard
+              productId="1"
+              name="Macbook"
+              price={2300}
+              stock={21}
+              handler={addToCart}
+              photo={img1}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

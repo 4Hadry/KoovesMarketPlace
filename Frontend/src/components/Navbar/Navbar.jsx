@@ -12,7 +12,7 @@ const MenuLinks = [
   {
     id: 2,
     name: "Shop",
-    link: "/shop",
+    link: "/search",
   },
   {
     id: 3,

@@ -2,9 +2,9 @@ import express from "express";
 
 // import { isAdmin } from "../middleware/auth.js";
 import {
+  getBarCharts,
   getDashboardStats,
   getPieCharts,
-  //   getBarCharts,
   //   getLineCharts,
 } from "../controllers/statsController.js";
 import { isAdmin } from "../middleware/auth.js";
@@ -17,7 +17,7 @@ route.get("/stats", isAdmin, getDashboardStats);
 route.get("/pie", isAdmin, getPieCharts);
 
 // api/v1/dashboard/bar
-// route.get("/bar", isAdmin, getBarCharts);
+route.get("/bar", isAdmin, getBarCharts);
 
 // api/v1/dashboard/line
 // route.get("/line", isAdmin, getLineCharts);

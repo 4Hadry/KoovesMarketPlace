@@ -53,6 +53,7 @@ export const login = TryCatch(async (req, res, next) => {
   };
 
   if (user && (await user.matchPassword(password))) {
+    // console.log("Working");
     res.cookie("Token", token, options).json({
       _id: user._id,
       name: user.name,

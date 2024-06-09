@@ -73,3 +73,16 @@ export const getInventories = async ({ categories, productsCount }) => {
   });
   return categoryCount;
 };
+
+export const getChartData = ({ len, docArr, today, property }) => {
+  const data = new Array(len).fill(0);
+  docArr.forEach((i) => {
+    const creationDate = i.createdAt;
+    const monthDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
+    if (monthDiff < len) {
+      data[len - monthDiff - 1] += property ? i[property] : 1;
+    }
+  });
+
+  return data;
+};

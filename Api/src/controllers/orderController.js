@@ -44,7 +44,7 @@ export const addOrder = TryCatch(async (req, res, next) => {
 
   await reduceStock(orderItems);
 
-  invalidateCaches({
+  await invalidateCaches({
     product: true,
     order: true,
     admin: true,

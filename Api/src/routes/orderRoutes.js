@@ -14,7 +14,11 @@ const app = express.Router();
 
 app.post("/add", addOrder);
 app.get("/my", myOrder);
-app.get("/all", allOrder);
-app.route("/:id").get(getSingleOrder).put(processOrder).delete(deleteOrder);
+app.get("/all", isAdmin, allOrder);
+app
+  .route("/:id")
+  .get(getSingleOrder)
+  .put(isAdmin, processOrder)
+  .delete(isAdmin, deleteOrder);
 
 export default app;

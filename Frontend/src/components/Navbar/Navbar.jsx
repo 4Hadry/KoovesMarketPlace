@@ -1,79 +1,96 @@
+import { useState } from "react";
+import {
+  FaSearch,
+  FaShoppingBag,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUser,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { IoMdSearch } from "react-icons/io";
-import { FaCartShopping } from "react-icons/fa6";
-import DarkMode from "./DarkMode";
 
-const MenuLinks = [
-  {
-    id: 1,
-    name: "Home",
-    link: "/",
-  },
-  {
-    id: 2,
-    name: "Shop",
-    link: "/search",
-  },
-  {
-    id: 3,
-    name: "About",
-    link: "/about",
-  },
-  {
-    id: 3,
-    name: "Login",
-    link: "/login",
-  },
-];
+const user = { _id: "_id", role: "admin" };
 
-const Navbar = () => {
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const logOutHandler = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
-      <div className="py-4">
-        <div className="container flex justify-between items-center">
-          <div className="flex gap-4 items-center">
-            <Link
-              to={"/"}
-              className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl cursor-pointer"
+    <nav className=" bg-white">
+      <div className="flex justify-end gap-6 items-stretch p-5">
+        <Link
+          to={"/"}
+          onClick={() => setIsOpen(false)}
+          className=" text-lg font-medium "
+        >
+          HOME
+        </Link>
+        <Link
+          to={"/search"}
+          onClick={() => setIsOpen(false)}
+          className="text-color2 text-lg font-medium"
+        >
+          <FaSearch />
+        </Link>
+        <Link
+          to={"/cart"}
+          onClick={() => setIsOpen(false)}
+          className="text-color2 text-lg font-medium"
+        >
+          <FaShoppingBag />
+        </Link>
+        {user?._id ? (
+          <>
+            <button
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="text-color2 text-lg font-medium mr-4"
             >
-              Kooves
-            </Link>
-            <div className="hidden lg:block">
-              <ul className="flex items-center gap-4">
-                {MenuLinks.map((data, i) => (
-                  <li key={i}>
+              <FaUser />
+            </button>
+            {isOpen && (
+              <div className="dialog border border-gray-300 rounded p-2 w-24 absolute left-auto top-8">
+                <div className="flex flex-col items-start space-y-1">
+                  {user.role === "admin" && (
                     <Link
-                      to={data.link}
-                      className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200 cursor-pointer"
+                      to={"/admin/dashboard"}
+                      onClick={() => setIsOpen(false)}
+                      className="text-color2 text-sm font-medium"
                     >
-                      {data.name}
+                      Admin
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          {/* Nav Right  */}
-          <div className="flex justify-between items-center gap-4">
-            <div className="relative group hidden sm:block">
-              <input type="text" placeholder="Search..." className="search" />
-              <IoMdSearch className="text-xl text-gray-600 dark:text-gray-400 group-hover:text-primary absolute top-1/2 -translate-y-1/2 right-3 duration-200" />
-            </div>
-            {/* cart Icon  */}
-            <Link to={"/cart"} className="relative p-3">
-              <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
-              <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 right-0 flex items-center justify-center text-xs ">
-                4
+                  )}
+
+                  <Link
+                    to={"/order"}
+                    onClick={() => setIsOpen(false)}
+                    className="text-color2 text-sm font-medium"
+                  >
+                    Orders
+                  </Link>
+                  <button
+                    onClick={logOutHandler}
+                    className="text-color2 text-sm font-medium"
+                  >
+                    <FaSignOutAlt />
+                  </button>
+                </div>
               </div>
-            </Link>
-            <div>
-              <DarkMode />
-            </div>
-          </div>
-        </div>
+            )}
+          </>
+        ) : (
+          <Link
+            to={"/login"}
+            onClick={() => setIsOpen(false)}
+            className="text-color2 text-lg font-medium"
+          >
+            <FaSignInAlt />
+          </Link>
+        )}
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default Navbar;
+export default Header;

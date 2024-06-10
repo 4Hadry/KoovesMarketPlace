@@ -314,3 +314,56 @@ export const getBarCharts = TryCatch(async (req, res, next) => {
     charts,
   });
 });
+
+export const getLineCharts = TryCatch(async (req, res, next) => {
+  let charts;
+  const key = "admin-line-charts";
+  if (myCache.has(key)) charts = JSON.parse(myCache.get(key));
+  else {
+    const today = new Date();
+
+    const twMonthsAgo = new Date();
+    twMonthsAgo.setMonth(twMonthsAgo.getMonth() - 12);
+
+    const baseQuery = {
+      createdAt: {
+        $gte: twMonthsAgo,
+        $lte: today,
+      },
+    };
+
+    const [products, users, orders] = await Promise.all([
+      Product.find(baseQuery).select("createdAt"),
+      User.find(baseQuery).select("createdAt"),
+      Order.find(baseQuery).select(["createdAt", "total"]),
+    ]);
+
+    const productCounts = getChartData({ len: 12, today, docArr: products });
+    const userCounts = getChartData({ len: 12, today, docArr: users });
+    // const discount = getChartData({
+    //   len: 12,
+    //   today,
+    //   docArr: orders,
+    //   property: "discount",
+    // });
+    const revenue = getChartData({
+      len: 12,
+      today,
+      docArr: orders,
+      property: "total",
+    });
+    charts = {
+      products: productCounts,
+      users: userCounts,
+      // discount,
+      revenue,
+    };
+
+    myCache.set(key, JSON.stringify(charts));
+  }
+
+  return res.status(200).json({
+    success: true,
+    charts,
+  });
+});

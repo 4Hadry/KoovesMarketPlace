@@ -4,8 +4,8 @@ import express from "express";
 import {
   getBarCharts,
   getDashboardStats,
+  getLineCharts,
   getPieCharts,
-  //   getLineCharts,
 } from "../controllers/statsController.js";
 import { isAdmin } from "../middleware/auth.js";
 
@@ -20,6 +20,6 @@ route.get("/pie", isAdmin, getPieCharts);
 route.get("/bar", isAdmin, getBarCharts);
 
 // api/v1/dashboard/line
-// route.get("/line", isAdmin, getLineCharts);
+route.get("/line", isAdmin, getLineCharts);
 
 export default route;

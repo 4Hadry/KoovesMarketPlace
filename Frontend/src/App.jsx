@@ -9,6 +9,7 @@ import { Suspense, lazy } from "react";
 import ProductDetail from "./pages/ProductDetail";
 import Shipping from "./pages/Shipping";
 import Loader from "./pages/Loader";
+import Orders from "./pages/Orders.jsx";
 // import DashboardTable from "./components/admin/DashboardTable";
 // import Cart from "./pages/cart";
 // Pages
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="/register" element={<SignUp />} />
             <Route path="/productDtails" element={<ProductDetail />} />
             <Route path="/shipping" element={<Shipping />} />
+            <Route path="/order" element={<Orders />} />
             // Admin routes
             <Route
             // element={

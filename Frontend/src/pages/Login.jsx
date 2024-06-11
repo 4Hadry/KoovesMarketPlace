@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -12,6 +13,10 @@ const Login = () => {
     setUserData((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
+  };
+  const handleGoogleSignIn = (e) => {
+    e.preventDefault();
+    console.log("Google Sign In");
   };
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -60,6 +65,19 @@ const Login = () => {
                   onChange={changeInputHandler}
                   value={userData.password}
                 />
+              </div>
+              <div className="w-full text-center">
+                <p className="my-8">Already Signed In Once</p>
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  className="w-[70%] h-12 mx-auto flex items-center justify-center border border-blue-500 text-white bg-blue-500 rounded text-lg"
+                >
+                  <FcGoogle className="bg-white w-10 h-full" />
+                  <span className="flex-1 text-center">
+                    Sign in with Google
+                  </span>
+                </button>
               </div>
 
               <button

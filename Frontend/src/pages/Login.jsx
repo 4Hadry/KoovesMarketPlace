@@ -1,22 +1,33 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-hot-toast";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+import { useLoginMutation } from "../redux/api/userApi";
 
 const Login = () => {
   const [userData, setUserData] = useState({
-    name: "",
     email: "",
     password: "",
   });
+  const [login] = useLoginMutation();
 
   const changeInputHandler = (e) => {
     setUserData((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
   };
-  const handleGoogleSignIn = (e) => {
-    e.preventDefault();
-    console.log("Google Sign In");
+  const handleGoogleSignIn = async (e) => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+      await login({
+        nam,
+      });
+    } catch (error) {
+      toast.error("Signing in failed");
+    }
   };
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

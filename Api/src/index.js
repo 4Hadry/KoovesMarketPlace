@@ -19,9 +19,13 @@ config({
   path: "./.env",
 });
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 // app.use(bodyparse.json());
 // app.use(bodyparse.urlencoded({ extended: true }));
 

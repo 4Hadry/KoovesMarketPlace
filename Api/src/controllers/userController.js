@@ -7,10 +7,13 @@ import ErrorHandler from "../utils/utils-class.js";
 export const registerUser = TryCatch(async (req, res, next) => {
   const { _id, name, email, password, role } = req.body;
 
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findById({ _id });
 
   if (userExists) {
-    next(new ErrorHandler(`User ${name} already exists`, 400));
+    return res.status(200).json({
+      success: true,
+      message: `Welcome, ${userExists.name}`,
+    });
   }
 
   const user = await User.create({

@@ -1,19 +1,49 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-hot-toast";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+import { useLoginMutation } from "../redux/api/userApi";
 
 const SignUp = () => {
   const [userData, setUserData] = useState({
     name: "",
-    email: "",
     password: "",
-    cPassword: "",
   });
-
+  const [login] = useLoginMutation();
   const changeInputHandler = (e) => {
     setUserData((prevState) => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+      const res = await login({
+        name: userData.name,
+        password: userData.password,
+        email: user.email,
+        photo: user.photoURL,
+        _id: user.uid,
+      });
+
+      if ("data" in res) {
+        toast.success(res.data.message);
+      } else {
+        const error = res.error;
+        const mesage = error.data;
+        toast.error(mesage.message);
+      }
+
+      console.log(user);
+    } catch (error) {
+      toast.error("Signing in failed");
+    }
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -44,7 +74,7 @@ const SignUp = () => {
                   value={userData.name}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -61,7 +91,7 @@ const SignUp = () => {
                   onChange={changeInputHandler}
                   value={userData.email}
                 />
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="password"
@@ -80,40 +110,19 @@ const SignUp = () => {
                   value={userData.password}
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="confirm-password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              <div className="w-full text-center">
+                {/* <p className="my-8">Already Signed In Once</p> */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  className="w-[70%] h-12 mx-auto flex items-center justify-center border border-blue-500 text-white bg-blue-500 rounded text-lg"
                 >
-                  Confirm password
-                </label>
-                <input
-                  type="confirm-password"
-                  name="confirm-password"
-                  id="confirm-password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
-                  onChange={changeInputHandler}
-                  value={userData.cPassword}
-                />
+                  <FcGoogle className="bg-white w-10 h-full" />
+                  <span className="flex-1 text-center">
+                    Sign in with Google
+                  </span>
+                </button>
               </div>
-
-              <button
-                type="submit"
-                className="w-full text-white bg-red-500  hover:bg-red-600  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
-                Register
-              </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{" "}
-                <Link
-                  to={"/login"}
-                  className="font-medium text-blue-500 hover:underline dark:text-primary-500"
-                >
-                  Login here
-                </Link>
-              </p>
             </form>
           </div>
         </div>

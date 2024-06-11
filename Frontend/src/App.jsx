@@ -1,22 +1,24 @@
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
-// import Home from "./pages/Home";
-// import Cart from "./pages/Cart";
-// import Search from "./pages/Search";
-// import Login from "./pages/Login";
-// import SignUp from "./pages/SignUp";
+import { Suspense, lazy, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+
 import ProductDetail from "./pages/ProductDetail";
 import Shipping from "./pages/Shipping";
 import Loader from "./pages/Loader";
 import Orders from "./pages/Orders.jsx";
-// import DashboardTable from "./components/admin/DashboardTable";
-// import Cart from "./pages/cart";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase.js";
+import { userExist, userNotExist } from "./redux/reducer/userReducer.js";
+import { getUser } from "./redux/api/userApi.js";
+import ProtectedRoutes from "./components/ProtectRoutes.jsx";
+
 // Pages
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
 const Cart = lazy(() => import("./pages/Cart.jsx"));
-const Login = lazy(() => import("./pages/Login"));
+// const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp.jsx"));
 
 // Dashboard Routes
@@ -40,25 +42,64 @@ const TransactionManagement = lazy(() =>
 );
 
 const App = () => {
-  return (
+  const { user, loading } = useSelector((state) => {
+    return state.userReducer;
+  });
+  console.log(user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // console.log(user);
+        const data = await getUser(user.uid);
+        dispatch(userExist(data.user));
+      } else {
+        dispatch(userNotExist());
+      }
+    });
+  }, []);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar user={user} />
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<SignUp />} />
+            {/* <Route path="/login" element={<Login />} /> */}
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoutes isAuthenticated={user ? false : true}>
+                  <SignUp />
+                </ProtectedRoutes>
+              }
+            />
             <Route path="/productDtails" element={<ProductDetail />} />
-            <Route path="/shipping" element={<Shipping />} />
-            <Route path="/order" element={<Orders />} />
+            {/* Logged In Roures  */}
+            <Route
+              element={
+                <ProtectedRoutes isAuthenticated={user ? true : false} />
+              }
+            >
+              <Route path="/shipping" element={<Shipping />} />
+              <Route path="/order" element={<Orders />} />
+            </Route>
             // Admin routes
             <Route
-            // element={
-            //   <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} />
-            // }
+              element={
+                <ProtectedRoutes
+                  isAuthenticated={true}
+                  adminOnly={true}
+                  admin={user?.role === "admin" ? true : false}
+                />
+              }
             >
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/product" element={<Products />} />
@@ -88,6 +129,7 @@ const App = () => {
             </Route>
           </Routes>
         </Suspense>
+        <Toaster position="bottom-center" />
       </BrowserRouter>
     </>
   );

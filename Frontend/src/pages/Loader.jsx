@@ -14,3 +14,18 @@ const Loader = () => {
 };
 
 export default Loader;
+
+export const Skeleton = ({ width = "unset", length = 3 }) => {
+  const skeletions = Array.from({ length }, (_, idx) => (
+    <div
+      key={idx}
+      className="h-8 w-full bg-gray-300 mb-2.5 rounded animate-skeleton-loading"
+    ></div>
+  ));
+
+  return (
+    <div className="flex flex-col mt-6" style={{ width }}>
+      {skeletions}
+    </div>
+  );
+};

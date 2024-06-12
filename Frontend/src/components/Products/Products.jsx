@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 import Heading from "../../Shared/Heading";
 import ProductCard from "./ProductCard";
 
@@ -10,6 +11,8 @@ import img5 from "../../assets/product/p-5.jpg";
 import img6 from "../../assets/product/p-7.jpg";
 import img7 from "../../assets/product/p-9.jpg";
 import img8 from "../../assets/product/p-2.jpg";
+import { useLatestProductsQuery } from "../../redux/api/productApi";
+import Loader, { Skeleton } from "../../pages/Loader";
 
 const productData = [
   {
@@ -71,6 +74,9 @@ const productData = [
 ];
 
 const Products = () => {
+  const { data, isLoading, isError } = useLatestProductsQuery("");
+
+  if (isError) toast.error("Cannot Fetch the Products");
   const addToCart = () => {};
   return (
     <div>
@@ -80,14 +86,21 @@ const Products = () => {
         {/* Body Section  */}
         <div className="mb-10 ">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 place-items-center">
-            <ProductCard
-              productId="1"
-              name="Macbook"
-              price={2300}
-              stock={21}
-              handler={addToCart}
-              photo={img1}
-            />
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              data?.products.map((i) => (
+                <ProductCard
+                  key={i._id}
+                  productId={i._id}
+                  name={i.name}
+                  price={i.price}
+                  stock={i.stock}
+                  handler={addToCart}
+                  photo={i.photo}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

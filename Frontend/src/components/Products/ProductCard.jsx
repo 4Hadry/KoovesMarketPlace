@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../Shared/Button";
+import { server } from "../../redux/store";
 
 const ProductCard = ({ productId, name, photo, price, stock, handler }) => {
   return (
@@ -7,9 +8,9 @@ const ProductCard = ({ productId, name, photo, price, stock, handler }) => {
       {/* Image Section */}
       <div className="relative">
         <img
-          src={photo}
+          src={`${server}/${photo}`}
           alt={name}
-          className="h-[180px] w-full sm:h-[200px] md:h-[220px] lg:h-[240px] xl:h-[260px] object-cover rounded-t-lg"
+          className="h-[180px] lg:w-[300px] md:w-[200] sm:w-[150px] bg-gray-300 sm:h-[200px] md:h-[220px] lg:h-[240px] xl:h-[260px] object-cover rounded-t-lg"
         />
         {/* Hover Button */}
         <div className="hidden group-hover:flex absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm justify-center items-center transition duration-300">

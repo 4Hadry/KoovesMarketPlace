@@ -23,10 +23,6 @@ const productScheema = new mongoose.Schema(
       required: [true, "Please Enter  Category"],
       trim: true,
     },
-    brand: {
-      type: String,
-      required: [true, "Please Enter  Brand"],
-    },
   },
   { timestamps: true }
 );

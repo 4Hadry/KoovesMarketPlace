@@ -17,8 +17,8 @@ const app = express.Router();
 
 app
   .route("/")
-  .get(getAllProducts)
-  .post(protect, seller, singleUpload, createProduct);
+  .get(isAdmin, getAllProducts)
+  .post(isAdmin, singleUpload, createProduct);
 app.get("/latest", getLatestProducts);
 app.get("/categories", getCategories);
 app.get("/search", getProducts);

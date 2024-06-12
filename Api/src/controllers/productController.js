@@ -10,10 +10,10 @@ export const getLatestProducts = TryCatch(async (req, res, next) => {
   let key = "latest_products";
   if (myCache.has(key)) products = JSON.parse(myCache.get(key));
   else {
-    products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+    products = await Product.find({}).sort({ createdAt: -1 }).limit(8);
     myCache.set(key, JSON.stringify(products));
   }
-
+  // throw new Error("sdf");
   return res.status(200).json({
     success: true,
     products,
@@ -43,6 +43,7 @@ export const getAllProducts = TryCatch(async (req, res, next) => {
     myCache.set(key, JSON.stringify(data));
   }
 
+  // console.log("Hitttt");
   return res.status(200).json({
     success: true,
     data,
@@ -103,14 +104,14 @@ export const getProductById = TryCatch(async (req, res, next) => {
 
 // Seller
 export const createProduct = TryCatch(async (req, res, next) => {
-  const { name, price, stock, category, brand } = req.body;
+  const { name, price, stock, category } = req.body;
   const photo = req.file;
 
   //   console.log(req.body);
 
   if (!photo) return next(new ErrorHandler("Please add Photo", 400));
 
-  if (!name || !price || !stock || !category || !brand) {
+  if (!name || !price || !stock || !category) {
     rm(photo.path, () => {
       console.log("Deleted");
     });
@@ -124,7 +125,6 @@ export const createProduct = TryCatch(async (req, res, next) => {
     stock,
     category: category.toLowerCase(),
     photo: photo.path,
-    brand,
   });
   await invalidateCaches({ product: true, admin: true });
   return res.status(201).json({

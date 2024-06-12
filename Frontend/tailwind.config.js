@@ -19,6 +19,25 @@ export default {
           sm: "3rem",
         },
       },
+      keyframes: {
+        "loading-animation": {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "up-and-down": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "100%": { transform: "translate(-50%, -20%)" },
+        },
+        "skeleton-loading": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+      },
+      animation: {
+        "loading-animation": "loading-animation 1.5s infinite",
+        "up-and-down": "up-and-down 1.5s infinite",
+        "skeleton-loading": "skeleton-loading 1.5s infinite",
+      },
     },
   },
   plugins: [],

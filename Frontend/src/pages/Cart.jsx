@@ -1,26 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartItem from "../components/Cart/CartItem";
-
-const cartItems = [
-  {
-    productId: "iwhdihwdidbjwb",
-    photo: "https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg",
-    name: "Macbook",
-    price: 3000,
-    quantity: 4,
-    stock: 10,
-  },
-];
-
-const subTotal = 4000;
-const tax = Math.round(subTotal * 0.18);
-const shippingCharges = 200;
-const discount = 400;
-const total = subTotal + tax + shippingCharges;
+import {
+  addToCart,
+  calculatePrice,
+  removeCartItems,
+} from "../redux/reducer/cartReducer";
 
 const Cart = () => {
+  const { cartItems, subTotal, tax, total, shippingCharges, discount } =
+    useSelector((state) => state.cartReducer);
+  const dispatch = useDispatch();
+
+  const incrementHandler = (cartItem) => {
+    if (cartItem.quantity >= cartItem.stock) return;
+
+    dispatch(addToCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
+  };
+  const decrementHandler = (cartItem) => {
+    if (cartItem.quantity <= 1) return;
+
+    dispatch(addToCart({ ...cartItem, quantity: cartItem.quantity - 1 }));
+  };
+  const removeHandler = (productId) => {
+    dispatch(removeCartItems(productId));
+  };
+
+  useEffect(() => {
+    dispatch(calculatePrice());
+  }, [cartItems]);
+  console.log(subTotal);
   return (
     <div>
       <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -31,11 +42,17 @@ const Cart = () => {
 
           <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-              <div class="space-y-6">
-                <main>
+              <div class="space-y-6 m-4">
+                <main className="flex flex-col gap-4">
                   {cartItems.length > 0 ? (
                     cartItems.map((i, idx) => (
-                      <CartItem key={idx} cartItem={i} />
+                      <CartItem
+                        key={idx}
+                        cartItem={i}
+                        increment={incrementHandler}
+                        decrement={decrementHandler}
+                        remove={removeHandler}
+                      />
                     ))
                   ) : (
                     <h1>No Items Added</h1>
@@ -98,13 +115,14 @@ const Cart = () => {
                     </dd>
                   </dl>
                 </div>
-
-                <Link
-                  to={""}
-                  class="flex w-full items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Proceed to Checkout
-                </Link>
+                {cartItems.length > 0 && (
+                  <Link
+                    to={"/shipping"}
+                    class="flex w-full items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  >
+                    Proceed to Checkout
+                  </Link>
+                )}
 
                 <div class="flex items-center justify-center gap-2">
                   <span class="text-sm font-normal text-gray-500 dark:text-gray-400">

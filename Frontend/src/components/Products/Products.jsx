@@ -12,72 +12,25 @@ import img6 from "../../assets/product/p-7.jpg";
 import img7 from "../../assets/product/p-9.jpg";
 import img8 from "../../assets/product/p-2.jpg";
 import { useLatestProductsQuery } from "../../redux/api/productApi";
-import Loader, { Skeleton } from "../../pages/Loader";
-
-const productData = [
-  {
-    _id: 1,
-    photo: img1,
-    title: "Boat Headphone",
-    price: "120",
-    aosDelay: "0",
-  },
-  {
-    _id: 2,
-    photo: img2,
-    title: "Rocky Mountain",
-    price: "420",
-    aosDelay: "200",
-  },
-  {
-    _id: 3,
-    photo: img3,
-    title: "Googles",
-    price: "320",
-    aosDelay: "400",
-  },
-  {
-    _id: 4,
-    photo: img4,
-    title: "Printed",
-    price: "220",
-    aosDelay: "600",
-  },
-  {
-    _id: 5,
-    photo: img5,
-    title: "Boat Headphone",
-    price: "120",
-    aosDelay: "0",
-  },
-  {
-    _id: 6,
-    photo: img6,
-    title: "Rocky Mountain",
-    price: "420",
-    aosDelay: "200",
-  },
-  {
-    _id: 7,
-    photo: img7,
-    title: "Googles",
-    price: "320",
-    aosDelay: "400",
-  },
-  {
-    _id: 8,
-    photo: img8,
-    title: "Printed",
-    price: "220",
-    aosDelay: "600",
-  },
-];
+import { Skeleton } from "../../pages/Loader";
+import { useDispatch } from "react-redux";
+import { removeCartItems, addToCart } from "../../redux/reducer/cartReducer";
 
 const Products = () => {
   const { data, isLoading, isError } = useLatestProductsQuery("");
+  const dispatch = useDispatch();
+  const addToCartHandler = (cartItem) => {
+    console.log("Handler called with:", cartItem); // Debugging log
+    if (cartItem.stock < 1) {
+      return toast.error("Out of Stock");
+    }
+    console.log("Dispatching action with item:", cartItem); // Debugging log
+    dispatch(addToCart(cartItem));
+    toast.success("Added to cart");
 
+    dispatch(addToCart(cartItem));
+  };
   if (isError) toast.error("Cannot Fetch the Products");
-  const addToCart = () => {};
   return (
     <div>
       <div className="container">
@@ -96,8 +49,8 @@ const Products = () => {
                   name={i.name}
                   price={i.price}
                   stock={i.stock}
-                  handler={addToCart}
                   photo={i.photo}
+                  handler={addToCartHandler}
                 />
               ))
             )}

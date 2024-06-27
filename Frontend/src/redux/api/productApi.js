@@ -32,11 +32,30 @@ export const productAPI = createApi({
       },
       providesTags: ["products"],
     }),
+    productDetails: builder.query({
+      query: (id) => id,
+      providesTags: ["products"],
+    }),
     newProduct: builder.mutation({
       query: ({ formData, id }) => ({
         url: `?id=${id}`,
         method: "POST",
         body: formData,
+      }),
+      invalidatesTags: ["products"],
+    }),
+    updateProduct: builder.mutation({
+      query: ({ formData, userId, productId }) => ({
+        url: `${productId}?id=${userId}`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["products"],
+    }),
+    deleteProduct: builder.mutation({
+      query: ({ formData, userId, productId }) => ({
+        url: `${productId}?id=${userId}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["products"],
     }),
@@ -49,4 +68,7 @@ export const {
   useCategoriesQuery,
   useSearchProductsQuery,
   useNewProductMutation,
+  useProductDetailsQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } = productAPI;

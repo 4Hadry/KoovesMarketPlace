@@ -25,7 +25,7 @@ app.get("/search", getProducts);
 app
   .route("/:id")
   .get(getProductById)
-  .put(protect, seller, singleUpload, updateProduct)
-  .delete(protect, seller, deleteProduct);
+  .put(isAdmin, singleUpload, updateProduct)
+  .delete(isAdmin, deleteProduct);
 
 export default app;

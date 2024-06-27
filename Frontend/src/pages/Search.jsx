@@ -6,6 +6,8 @@ import {
 } from "../redux/api/productApi";
 import toast from "react-hot-toast";
 import { Skeleton } from "./Loader";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/reducer/cartReducer";
 
 const Search = () => {
   const {
@@ -28,9 +30,17 @@ const Search = () => {
     error: productError,
   } = useSearchProductsQuery({ search, sort, category, page, price: maxPrice });
   // console.log(maxPrice);
+  const dispatch = useDispatch();
 
-  const addToCart = () => {};
-
+  const addToCartHandler = (cartItem) => {
+    // console.log("Handler called with:", cartItem); // Debugging log
+    if (cartItem.stock < 1) {
+      return toast.error("Out of Stock");
+    }
+    // console.log("Dispatching action with item:", cartItem); // Debugging log
+    dispatch(addToCart(cartItem));
+    toast.success("Added to cart");
+  };
   const isPrevPage = page > 1;
   const isNextPage = page < 4;
 
@@ -109,7 +119,7 @@ const Search = () => {
                   name={i.name}
                   price={i.price}
                   stock={i.stock}
-                  handler={addToCart}
+                  handler={addToCartHandler}
                   photo={i.photo}
                 />
               ))}

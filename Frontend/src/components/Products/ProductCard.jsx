@@ -14,12 +14,29 @@ const ProductCard = ({ productId, name, photo, price, stock, handler }) => {
         />
         {/* Hover Button */}
         <div className="hidden group-hover:flex absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm justify-center items-center transition duration-300">
-          <div onClick={() => handler()}>
-            <Button
+          <div>
+            {/* <Button
               text={"Add to cart"}
               bgColor={"bg-primary"}
               textColor={"text-white"}
-            />
+            /> */}
+            <button
+              className="bg-primary text-white p-4 rounded-full"
+              onClick={() => {
+                const item = {
+                  productId,
+                  price,
+                  name,
+                  photo,
+                  stock,
+                  quantity: 1,
+                };
+                // console.log("Handler item:", item); // Debugging log
+                handler(item);
+              }}
+            >
+              +
+            </button>
           </div>
         </div>
       </div>

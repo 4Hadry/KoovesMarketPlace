@@ -20,6 +20,8 @@ const Search = lazy(() => import("./pages/Search"));
 const Cart = lazy(() => import("./pages/Cart.jsx"));
 // const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const CheckOut = lazy(() => import("./pages/CheckOut.jsx"));
 
 // Dashboard Routes
 
@@ -89,6 +91,7 @@ const App = () => {
               }
             >
               <Route path="/shipping" element={<Shipping />} />
+              <Route path="/pay" element={<CheckOut />} />
               <Route path="/order" element={<Orders />} />
             </Route>
             // Admin routes
@@ -127,6 +130,7 @@ const App = () => {
                 element={<TransactionManagement />}
               />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
         <Toaster position="bottom-center" />

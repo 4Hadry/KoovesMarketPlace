@@ -17,7 +17,7 @@ const Productmanagement = () => {
 
   const params = useParams();
 
-  const { data, isLoading } = useProductDetailsQuery(params.id);
+  const { data, isLoading, isError } = useProductDetailsQuery(params.id);
 
   const { price, category, name, photo, stock } = data?.product || {
     photo: "",
@@ -91,6 +91,7 @@ const Productmanagement = () => {
     }
   }, [data]);
 
+  if (isError) return <Navigate to="/404" />;
   return (
     <div className="admin-container">
       <AdminSidebar />

@@ -5,6 +5,7 @@ export const userAPI = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/user/`,
   }),
+  tagTypes: ["users"],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (user) => ({
@@ -12,6 +13,18 @@ export const userAPI = createApi({
         method: "POST",
         body: user,
       }),
+      invalidatesTags: ["users"],
+    }),
+    deleteUsr: builder.mutation({
+      query: (userId, adminId) => ({
+        url: `${userId}?id=${adminId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["users"],
+    }),
+    allUsers: builder.query({
+      query: (id) => `all?id=${id}`,
+      providesTags: ["users"],
     }),
   }),
 });

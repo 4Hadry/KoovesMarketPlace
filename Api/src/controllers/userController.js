@@ -5,7 +5,7 @@ import { generateToken } from "../utils/generateToken.js";
 import ErrorHandler from "../utils/utils-class.js";
 
 export const registerUser = TryCatch(async (req, res, next) => {
-  const { _id, name, email, password, role } = req.body;
+  const { _id, name, email, password, role, photo } = req.body;
 
   const userExists = await User.findById({ _id });
 
@@ -22,6 +22,7 @@ export const registerUser = TryCatch(async (req, res, next) => {
     email,
     password,
     role,
+    photo,
   });
 
   invalidateCaches({

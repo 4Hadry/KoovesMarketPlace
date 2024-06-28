@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    photo: {
+      type: String,
+      required: [true, "Please add photo"],
+    },
     role: {
       type: String,
       enum: ["buyer", "seller", "admin"],

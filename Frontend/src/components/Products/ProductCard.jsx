@@ -31,7 +31,6 @@ const ProductCard = ({ productId, name, photo, price, stock, handler }) => {
                   stock,
                   quantity: 1,
                 };
-                // console.log("Handler item:", item); // Debugging log
                 handler(item);
               }}
             >

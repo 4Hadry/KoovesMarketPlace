@@ -3,28 +3,20 @@ import toast from "react-hot-toast";
 import Heading from "../../Shared/Heading";
 import ProductCard from "./ProductCard";
 
-import img1 from "../../assets/product/p-1.jpg";
-import img2 from "../../assets/product/p-2.jpg";
-import img3 from "../../assets/product/p-3.jpg";
-import img4 from "../../assets/product/p-4.jpg";
-import img5 from "../../assets/product/p-5.jpg";
-import img6 from "../../assets/product/p-7.jpg";
-import img7 from "../../assets/product/p-9.jpg";
-import img8 from "../../assets/product/p-2.jpg";
-import { useLatestProductsQuery } from "../../redux/api/productApi";
-import { Skeleton } from "../../pages/Loader";
 import { useDispatch } from "react-redux";
-import { removeCartItems, addToCart } from "../../redux/reducer/cartReducer";
+import { Skeleton } from "../../pages/Loader";
+import { useLatestProductsQuery } from "../../redux/api/productApi";
+import { addToCart } from "../../redux/reducer/cartReducer";
 
 const Products = () => {
   const { data, isLoading, isError } = useLatestProductsQuery("");
   const dispatch = useDispatch();
   const addToCartHandler = (cartItem) => {
-    console.log("Handler called with:", cartItem); // Debugging log
+    // console.log("Handler called with:", cartItem);
     if (cartItem.stock < 1) {
       return toast.error("Out of Stock");
     }
-    console.log("Dispatching action with item:", cartItem); // Debugging log
+    // console.log("Dispatching action with item:", cartItem);
     dispatch(addToCart(cartItem));
     toast.success("Added to cart");
 

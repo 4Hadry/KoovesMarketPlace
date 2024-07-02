@@ -9,17 +9,18 @@ import { BarChart, DoughnutChart } from "../../components/admin/Charts";
 import Table from "../../components/admin/DashboardTable";
 import { useStatsQuery } from "../../redux/api/dashboardApi";
 import { Skeleton } from "../Loader";
+import { Navigate } from "react-router-dom";
 
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.userReducer);
-  const { isLoading, data, error, isError } = useStatsQuery(user?._id);
+  const { isLoading, data, isError } = useStatsQuery(user?._id);
 
   const stats = data?.stats;
 
-  if (isError) toast.error(error.data.message);
+  if (isError) return <Navigate to={"/"} />;
 
   return (
     <div className="admin-container">
